@@ -14,7 +14,7 @@ const loginController = async (req, res) => {
 
 
     const { username, password } = req.body;
-    const userRecord = await User.findOne({ username: username });
+    const userRecord = await User.findOne({ username: username }).select('+password');
 
 if (!userRecord) {
         return res.status(401).json({ message: 'Invalid credentials.' });
@@ -23,13 +23,13 @@ if (!userRecord) {
     
     
     
-    const passwordIsValid = await Auth.verifyPw(password, userRecord.password);
+    const passwordIsValid = await Auth.comparePassword(password, userRecord.password);
     if (!passwordIsValid) {
         return res.status(401).json({ message: 'Invalid credentials.' });
     }
-    const token = Auth.signJWT(userRecord.id);
+    const token = Auth.generateAuthToken(userRecord.id);
     const responsePayload = {
-        accessToken: token,
+        access_token: token,
     };
 
     return res.status(200).json(responsePayload);

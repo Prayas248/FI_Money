@@ -127,7 +127,7 @@ r.post('/register',
 );
 
 /* --------- protected routes --------- */
-r.use(Auth.authMid);
+r.use(Auth.authMiddleware);
 
 /**
  * @openapi

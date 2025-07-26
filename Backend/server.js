@@ -7,7 +7,7 @@ import apiRoutes from './routes.js';
 import { swaggerSpec } from './swagger.js';
 
 const PORT = process.env.PORT || 8080;
-const MONGO_URI = process.env.MONGO_URL || 'mongodb://localhost:27017/inventory';
+const MONGO_URI = process.env.MONGO_URL || 'mongodb://localhost:27017/prayas';
 
 const initializeServer = async () => {
   try {

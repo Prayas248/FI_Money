@@ -12,7 +12,7 @@ const registerUserHandler = async (req, res) => {
     try {
         const { username, password, ...details } = req.body;
 
-        const hashedPassword = await Auth.hashPw(password);
+        const hashedPassword = await Auth.createPasswordHash(password);
 
         const newUser = await User.create({
             username,
