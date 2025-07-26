@@ -31,7 +31,7 @@ function Products() {
     setLoading(true);
     try {
       const data = await ApiService.getProducts(page, 10, search);
-      setProducts(data.products || []);
+      setProducts(data || []);
       setTotalPages(data.totalPages || 1);
     } catch (error) {
       console.error('Error fetching products:', error);

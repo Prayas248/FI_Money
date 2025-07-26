@@ -29,7 +29,7 @@ function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       const productsResponse = await ApiService.getProducts(1, 5); // Get 5 most recent
-      setRecentProducts(productsResponse.products || []);
+      setRecentProducts(productsResponse || []);
       
       const analyticsResponse = await ApiService.getAnalytics();
       

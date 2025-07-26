@@ -9,8 +9,8 @@ const createProductHandler = async (req, res) => {
   }
 
   try {
+    
     const newProduct = await Product.create(req.body);
-
     const productData = {
       ...newProduct.toObject(),
       product_id: newProduct._id,
