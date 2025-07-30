@@ -2,12 +2,15 @@
 
 A modern, full-stack inventory management application built with React and Node.js, featuring JWT authentication, product management, and real-time analytics.
 
+![alt text](docker.png)
+
 ## 🚀 Features
 
 ### Core Functionality
 - **User Authentication**: Secure registration and login with JWT tokens
-- **Product Management**: Add, update, search, and manage inventory items
-- **Inventory Tracking**: Real-time stock level monitoring with low-stock alerts
+- **Product Management**: Add, update, search, and manage inventory ite2. Deploy to your preferred platform (Heroku, AWS, DigitalOcean, etc.)
+
+#### Frontend Deployment- **Inventory Tracking**: Real-time stock level monitoring with low-stock alerts
 - **Analytics Dashboard**: Overview of total products, inventory value, and stock status
 - **Search & Pagination**: Efficient product search with paginated results
 - **Responsive Design**: Mobile-friendly interface built with Tailwind CSS
@@ -41,9 +44,21 @@ A modern, full-stack inventory management application built with React and Node.
 - **Swagger** - API documentation
 - **CORS** - Cross-origin resource sharing
 
+### DevOps & Deployment
+- **Docker** - Containerization platform
+- **Docker Compose** - Multi-container orchestration
+- **Nginx** - Web server for frontend serving
+- **Alpine Linux** - Lightweight container base images
+
 ## 📦 Installation
 
 ### Prerequisites
+
+#### Option 1: Docker (Recommended)
+- Docker and Docker Compose installed on your system
+- No need for Node.js or MongoDB installation
+
+#### Option 2: Manual Setup
 - Node.js (v16 or higher)
 - MongoDB (local or cloud instance)
 - npm or yarn package manager
@@ -51,8 +66,62 @@ A modern, full-stack inventory management application built with React and Node.
 ### Clone the Repository
 ```bash
 git clone https://github.com/Prayas248/FI_Money.git
-cd FI_Money_prayas
+cd FI_Money
 ```
+
+## 🐳 Docker Installation (Recommended)
+
+The easiest way to run the application is using Docker. This will set up the entire stack including MongoDB, Backend, and Frontend.
+
+### Quick Start with Docker
+```bash
+# Clone the repository
+git clone https://github.com/Prayas248/FI_Money.git
+cd FI_Money
+
+# Start all services with Docker Compose
+docker-compose up -d
+```
+
+This will start:
+- **MongoDB** on port `27017`
+- **Backend API** on port `8080`
+- **Frontend** on port `3000`
+
+### Docker Commands
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Rebuild and start (after code changes)
+docker-compose up --build -d
+
+# Stop and remove all containers, networks, and volumes
+docker-compose down -v
+```
+
+### Access the Application
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8080
+- **API Documentation**: http://localhost:8080/api-docs
+- **MongoDB**: localhost:27017
+
+### Docker Architecture
+The application uses a multi-container setup:
+- **Frontend Container**: Nginx serving the built React app
+- **Backend Container**: Node.js Express server
+- **MongoDB Container**: Official MongoDB image with persistent data storage
+- **Network**: All containers communicate through a custom bridge network
+
+## ⚙️ Manual Installation (Alternative)
+
+If you prefer to run the application without Docker, follow these steps:
 
 ### Backend Setup
 ```bash
@@ -92,18 +161,25 @@ npm start      # Alternative development command
 
 The application will be available at `http://localhost:3000`
 
+> **Note**: When running manually, make sure MongoDB is running and accessible at the configured connection string.
+
 ## 🔧 Configuration
 
 ### Environment Variables
 
-#### Backend (.env)
+#### Docker Environment (Recommended)
+When using Docker Compose, the environment is automatically configured. The MongoDB connection string is set to `mongodb://mongodb:27017/prayas` to connect to the MongoDB container.
+
+#### Manual Setup Environment Variables
+
+##### Backend (.env)
 ```env
 PORT=8080                                    # Server port
 MONGO_URL=mongodb://localhost:27017/fimoney  # MongoDB connection string
 JWT_SECRET=your-jwt-secret-key               # JWT signing secret
 ```
 
-#### Frontend
+##### Frontend
 The frontend is configured to connect to the backend at `http://localhost:8080`. To change this, update the `API_BASE_URL` in `src/services/api.js`.
 
 ## 📚 API Documentation
@@ -147,6 +223,15 @@ http://localhost:8080/api-docs
 
 ## 🧪 Testing
 
+### Docker Testing
+```bash
+# Start the application with Docker
+docker-compose up -d
+
+# Wait for services to be ready, then run tests
+docker-compose exec backend python test_api.py
+```
+
 ### Backend API Testing
 A Python test script is included to test all API endpoints:
 
@@ -163,7 +248,7 @@ The test script covers:
 - Product retrieval
 
 ### Manual Testing
-1. Start both backend and frontend servers
+1. Start the application (Docker: `docker-compose up -d` or manually start both servers)
 2. Register a new user account
 3. Add some test products
 4. Test search functionality
@@ -173,53 +258,144 @@ The test script covers:
 ## 📁 Project Structure
 
 ```
-FI_Money_prayas/
+FI_Money/
+├── docker-compose.yml      # Docker Compose configuration
 ├── Backend/
-│   ├── controllers/          # Route handlers
+│   ├── Dockerfile          # Backend container configuration
+│   ├── controllers/        # Route handlers
 │   │   ├── add_product.js
 │   │   ├── get_products.js
 │   │   ├── login.js
 │   │   ├── register.js
 │   │   └── update_product.js
 │   ├── lib/
-│   │   └── auth.js          # Authentication utilities
-│   ├── models/              # Mongoose models
+│   │   └── auth.js        # Authentication utilities
+│   ├── models/            # Mongoose models
 │   │   ├── Product.js
 │   │   └── User.js
 │   ├── package.json
-│   ├── routes.js           # API routes
-│   ├── server.js           # Express server
-│   ├── swagger.js          # API documentation
-│   └── test_api.py         # API testing script
+│   ├── routes.js         # API routes
+│   ├── server.js         # Express server
+│   ├── swagger.js        # API documentation
+│   └── test_api.py       # API testing script
 ├── Frontend/
-│   ├── public/             # Static assets
+│   ├── Dockerfile        # Frontend container configuration
+│   ├── public/           # Static assets
 │   ├── src/
-│   │   ├── components/     # React components
+│   │   ├── components/   # React components
 │   │   │   ├── AddProduct.jsx
 │   │   │   ├── Layout.jsx
 │   │   │   └── ProtectedRoute.jsx
-│   │   ├── contexts/       # React contexts
+│   │   ├── contexts/     # React contexts
 │   │   │   └── AuthContext.jsx
-│   │   ├── pages/          # Page components
+│   │   ├── pages/        # Page components
 │   │   │   ├── Analytics.jsx
 │   │   │   ├── Dashboard.jsx
 │   │   │   ├── Login.jsx
 │   │   │   ├── Products.jsx
 │   │   │   └── Register.jsx
-│   │   ├── services/       # API services
+│   │   ├── services/     # API services
 │   │   │   └── api.js
-│   │   ├── App.jsx         # Main app component
-│   │   ├── index.css       # Global styles
-│   │   └── main.jsx        # App entry point
+│   │   ├── App.jsx       # Main app component
+│   │   ├── index.css     # Global styles
+│   │   └── main.jsx      # App entry point
 │   ├── package.json
-│   ├── tailwind.config.js  # Tailwind configuration
-│   └── vite.config.js      # Vite configuration
+│   ├── tailwind.config.js # Tailwind configuration
+│   └── vite.config.js    # Vite configuration
 └── README.md
 ```
 
 ## 🚀 Deployment
 
-### Backend Deployment
+### Docker Deployment (Recommended)
+
+#### Production Docker Compose
+For production deployment, create a `docker-compose.prod.yml`:
+
+```yaml
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=prayas
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/prayas
+      - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+```
+
+Deploy with:
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+#### Container Registry Deployment
+1. Build and tag images:
+   ```bash
+   docker build -t your-registry/fi-money-backend:latest ./Backend
+   docker build -t your-registry/fi-money-frontend:latest ./Frontend
+   ```
+
+2. Push to registry:
+   ```bash
+   docker push your-registry/fi-money-backend:latest
+   docker push your-registry/fi-money-frontend:latest
+   ```
+
+3. Deploy on your server using the pushed images
+
+### Manual Deployment
+
+#### Backend Deployment
 1. Set production environment variables
 2. Ensure MongoDB connection string is configured
 3. Deploy to your preferred platform (Heroku, AWS, DigitalOcean, etc.)
@@ -238,6 +414,10 @@ FI_Money_prayas/
 - Configure CORS properly for your domain
 - Use HTTPS in production
 - Set up proper MongoDB indexes for performance
+- Use environment-specific Docker Compose files
+- Implement proper logging and monitoring for containers
+- Set up health checks for container orchestration
+- Use secrets management for sensitive environment variables
 
 ## 🤝 Contributing
 
